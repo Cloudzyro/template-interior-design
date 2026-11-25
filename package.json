@@ -2,7 +2,7 @@
   "name": "template-interior-design",
   "version": "1.0.0",
   "private": true,
-  "description": "An interior design studio website template built with Astro: projects with large galleries, services, process, press and an enquiry form.",
+  "description": "An interior design studio website template built with Astro: projects with large galleries, services, process, press and an inquiry form.",
   "license": "MIT",
   "type": "module",
   "scripts": {

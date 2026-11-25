@@ -71,7 +71,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
               </li>
             ))
           }
-          <li><a class="enquire" href="/enquire" aria-current={path === "/enquire" ? "page" : undefined}>Enquire</a></li>
+          <li><a class="inquire" href="/inquire" aria-current={path === "/inquire" ? "page" : undefined}>Inquire</a></li>
         </ul>
       </nav>
     </header>
@@ -91,7 +91,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
         </div>
         <ul>
           {site.nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
-          <li><a href="/enquire">Enquire</a></li>
+          <li><a href="/inquire">Inquire</a></li>
         </ul>
       </div>
       <p class="wrap legal">&copy; {new Date().getFullYear()} {site.fullName}</p>
@@ -133,7 +133,7 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
     color: var(--ink);
     border-bottom-color: var(--ink);
   }
-  nav .enquire {
+  nav .inquire {
     color: var(--accent);
   }
   .site-footer {

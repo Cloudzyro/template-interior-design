@@ -228,7 +228,7 @@ export const press = [
 ];
 export const pressNote = "Publications and quotes are fictional, written for this template.";
 
-export const enquiry = {
+export const inquiry = {
   types: ["Whole house", "Renovation", "New build", "Apartment", "One or two rooms", "Consultation"],
   budgets: ["Under $50,000", "$50,000 to $150,000", "$150,000 to $400,000", "Over $400,000", "Not sure yet"],
   timelines: ["As soon as possible", "In the next 6 months", "6 to 12 months", "Next year or later"],

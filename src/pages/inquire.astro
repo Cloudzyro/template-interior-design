@@ -1,14 +1,14 @@
 ---
 import Base from "../layouts/Base.astro";
-import { site, enquiry } from "../data/site";
+import { site, inquiry } from "../data/site";
 
 // Sends to PUBLIC_FORM_ENDPOINT (Formspree, Basin, a Supabase function or similar).
 // With no endpoint set, sending opens the visitor's email app instead.
 const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? "";
-const subject = `Project enquiry for ${site.fullName}`;
+const subject = `Project inquiry for ${site.fullName}`;
 ---
 
-<Base title="Enquire" description={`Tell ${site.fullName} about your house or apartment.`}>
+<Base title="Inquire" description={`Tell ${site.fullName} about your house or apartment.`}>
   <div class="wrap layout">
     <header>
       <h1 class="display h1">Tell us about your house</h1>
@@ -21,7 +21,7 @@ const subject = `Project enquiry for ${site.fullName}`;
     </header>
 
     <form
-      class="enquiry"
+      class="inquiry"
       method="post"
       action={endpoint || `mailto:${site.email}`}
       data-endpoint={endpoint}
@@ -44,7 +44,7 @@ const subject = `Project enquiry for ${site.fullName}`;
       <div class="row">
         <label class="field">
           <span>Kind of project</span>
-          <select name="project_type">{enquiry.types.map((t) => <option>{t}</option>)}</select>
+          <select name="project_type">{inquiry.types.map((t) => <option>{t}</option>)}</select>
         </label>
         <label class="field"><span>Where is it</span><input name="location" placeholder="Town or neighborhood" /></label>
       </div>
@@ -55,11 +55,11 @@ const subject = `Project enquiry for ${site.fullName}`;
       <div class="row">
         <label class="field">
           <span>Budget</span>
-          <select name="budget">{enquiry.budgets.map((b) => <option>{b}</option>)}</select>
+          <select name="budget">{inquiry.budgets.map((b) => <option>{b}</option>)}</select>
         </label>
         <label class="field">
           <span>Timeline</span>
-          <select name="timeline">{enquiry.timelines.map((t) => <option>{t}</option>)}</select>
+          <select name="timeline">{inquiry.timelines.map((t) => <option>{t}</option>)}</select>
         </label>
       </div>
       <label class="field">
@@ -67,7 +67,7 @@ const subject = `Project enquiry for ${site.fullName}`;
         <textarea name="message" rows="6" placeholder="How you use the house, what isn't working, rooms or pictures you love"></textarea>
       </label>
       <div class="actions">
-        <button class="btn btn-primary" type="submit">Send enquiry</button>
+        <button class="btn btn-primary" type="submit">Send inquiry</button>
         <p class="status" role="status" aria-live="polite"></p>
       </div>
     </form>
@@ -75,7 +75,7 @@ const subject = `Project enquiry for ${site.fullName}`;
 </Base>
 
 <script>
-  document.querySelectorAll<HTMLFormElement>("form.enquiry").forEach((form) => {
+  document.querySelectorAll<HTMLFormElement>("form.inquiry").forEach((form) => {
     const status = form.querySelector<HTMLElement>(".status")!;
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -146,7 +146,7 @@ const subject = `Project enquiry for ${site.fullName}`;
   dd a {
     text-decoration: none;
   }
-  .enquiry {
+  .inquiry {
     display: grid;
     gap: 20px;
     padding-top: 8px;

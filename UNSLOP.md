@@ -25,7 +25,7 @@ No gradients, glows, gradient text, emoji, pill badges, uppercase tracked labels
 ## Changes
 
 - Spacing: home process in three columns with room for each title
-- Color: no change needed (olive only on the primary button and the Enquire link; the rooms carry the color)
+- Color: no change needed (olive only on the primary button and the Inquire link; the rooms carry the color)
 - Copy: no change needed
 - Type: no change needed (Gilda Display for headlines only, Commissioner at 400 and 500)
 - Layout: each project has a `cover` view, so lists show a living room, an entry hall, a limestone bath, a dark parlor and a cottage kitchen; the gallery is 2:1 on desktop (4:3 on phones) so the caption and thumbnails sit on the same screen
