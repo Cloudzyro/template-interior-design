@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="Page not found">
+  <section class="wrap nf">
+    <h1 class="display h1">This room isn't finished</h1>
+    <p class="lede">We couldn't find that page. The projects are a good place to start again.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/projects">See the projects</a>
+      <a class="text-link" href="/">Home</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+    padding-block: 120px 160px;
+  }
+  .actions {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+</style>

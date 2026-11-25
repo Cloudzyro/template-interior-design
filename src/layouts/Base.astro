@@ -1,0 +1,197 @@
+---
+import "@fontsource/gilda-display";
+import "@fontsource-variable/commissioner";
+import "../styles/global.css";
+import { site } from "../data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const fullTitle = title ? `${title} | ${site.fullName}` : `${site.fullName} | ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  additionalType: "https://schema.org/ProfessionalService",
+  name: site.fullName,
+  description: site.description,
+  telephone: site.phone,
+  email: site.email,
+  url: Astro.site?.toString(),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: site.address.street,
+    addressLocality: site.address.city,
+    addressRegion: site.address.region,
+    postalCode: site.address.postal,
+    addressCountry: site.address.country,
+  },
+};
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#ecebe6" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.fullName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="wrap site-header">
+      <a class="logo" href="/" aria-label={`${site.fullName}, home`}>{site.name}</a>
+      <nav aria-label="Main">
+        <ul>
+          {
+            site.nav.map((n) => (
+              <li>
+                <a href={n.href} aria-current={path === n.href || path.startsWith(n.href + "/") ? "page" : undefined}>
+                  {n.label}
+                </a>
+              </li>
+            ))
+          }
+          <li><a class="enquire" href="/enquire" aria-current={path === "/enquire" ? "page" : undefined}>Enquire</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap grid">
+        <p class="f-logo display">{site.name}</p>
+        <div>
+          <p>{site.address.street}<br />{site.address.city}, {site.address.region} {site.address.postal}</p>
+          <p class="muted">Studio visits by appointment</p>
+        </div>
+        <div>
+          <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+          <p><a class="tnum" href={`tel:${site.phoneHref}`}>{site.phone}</a></p>
+        </div>
+        <ul>
+          {site.nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href="/enquire">Enquire</a></li>
+        </ul>
+      </div>
+      <p class="wrap legal">&copy; {new Date().getFullYear()} {site.fullName}</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    min-height: 88px;
+  }
+  .logo {
+    font-family: var(--display);
+    font-size: 26px;
+    text-decoration: none;
+    letter-spacing: 0;
+  }
+  nav ul {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  nav a {
+    font-size: 15px;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding-block: 6px;
+    border-bottom: 1px solid transparent;
+    transition: color 150ms var(--ease), border-color 150ms var(--ease);
+  }
+  nav a:hover {
+    color: var(--ink);
+  }
+  nav a[aria-current="page"] {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+  nav .enquire {
+    color: var(--accent);
+  }
+  .site-footer {
+    margin-top: 0;
+    padding-top: 64px;
+    border-top: 1px solid var(--line-strong);
+    font-size: 15px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 0.6fr;
+    gap: 32px;
+  }
+  .f-logo {
+    font-size: 32px;
+  }
+  .site-footer p + p {
+    margin-top: 8px;
+  }
+  .site-footer ul {
+    display: grid;
+    gap: 6px;
+  }
+  .site-footer a {
+    text-decoration: none;
+  }
+  .site-footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .legal {
+    margin-top: 64px;
+    padding-block: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+  @media (max-width: 700px) {
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding-block: 20px 12px;
+      min-height: 0;
+    }
+    nav ul {
+      gap: 20px;
+    }
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 420px) {
+    nav ul {
+      gap: 16px;
+    }
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

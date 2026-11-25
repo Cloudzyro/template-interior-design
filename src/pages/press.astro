@@ -1,0 +1,84 @@
+---
+import Base from "../layouts/Base.astro";
+import { site, press, pressNote, projects } from "../data/site";
+
+const projectName = (slug: string) => projects.find((p) => p.slug === slug)?.name;
+---
+
+<Base title="Press" description={`Writing about ${site.fullName}.`}>
+  <header class="wrap head">
+    <h1 class="display h1">Press</h1>
+    <p class="lede">For interviews and pictures, write to <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </header>
+
+  <section class="wrap list" aria-label="Articles">
+    {
+      press.map((p) => (
+        <article>
+          <p class="outlet">
+            {p.outlet}
+            <span class="muted">{p.date}</span>
+          </p>
+          <div>
+            <h2 class="display">{p.title}</h2>
+            <blockquote>{p.quote}</blockquote>
+            {p.project && (
+              <a class="text-link" href={`/projects/${p.project}`}>
+                {projectName(p.project)}
+              </a>
+            )}
+          </div>
+        </article>
+      ))
+    }
+    <p class="note muted">{pressNote}</p>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding-block: clamp(32px, 5vw, 64px) 48px;
+  }
+  .lede {
+    margin-top: 16px;
+  }
+  .list {
+    border-top: 1px solid var(--line-strong);
+    padding-bottom: 128px;
+  }
+  article {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    padding-block: 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .outlet {
+    display: grid;
+    gap: 2px;
+    font-weight: 500;
+  }
+  .outlet .muted {
+    font-weight: 400;
+    font-size: 14px;
+  }
+  h2 {
+    font-size: 30px;
+  }
+  blockquote {
+    margin: 12px 0 16px;
+    color: var(--ink-2);
+    font-size: 18px;
+    max-width: 40rem;
+  }
+  .note {
+    font-size: 13px;
+    padding-top: 16px;
+  }
+  @media (max-width: 760px) {
+    article {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+</style>

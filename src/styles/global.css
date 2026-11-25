@@ -1,0 +1,221 @@
+/* Calloway Reyes. Colors, type and spacing live here. */
+:root {
+  --stone: #ecebe6; /* page, limestone */
+  --card: #f7f6f2;
+  --raised: #e2e0d9;
+  --ink: #23221e;
+  --ink-2: #55534c;
+  --ink-3: #6f6d65;
+  --line: rgb(35 34 30 / 0.1);
+  --line-strong: rgb(35 34 30 / 0.22);
+  --accent: #4f5a2e; /* deep olive, 7.4:1 with white */
+  --accent-dark: #3e4724;
+
+  --display: "Gilda Display", Georgia, serif;
+  --font: "Commissioner Variable", system-ui, sans-serif;
+  --radius: 4px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --wrap: 1280px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: var(--stone);
+  color: var(--ink);
+  font: 400 16px/1.65 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+a {
+  color: inherit;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+strong,
+b {
+  font-weight: 500;
+}
+
+.wrap {
+  width: min(100% - 64px, var(--wrap));
+  margin-inline: auto;
+}
+@media (max-width: 600px) {
+  .wrap {
+    width: min(100% - 32px, var(--wrap));
+  }
+}
+
+.display {
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+.h1 {
+  font-size: clamp(40px, 5.6vw, 76px);
+}
+.h2 {
+  font-size: clamp(30px, 3.4vw, 46px);
+}
+.lede {
+  font-size: clamp(17px, 1.5vw, 19px);
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 34rem;
+}
+.muted {
+  color: var(--ink-3);
+}
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 24px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-weight: 400;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 150ms var(--ease),
+    border-color 150ms var(--ease),
+    transform 150ms var(--ease);
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn-primary {
+  background: var(--accent);
+  color: #f4f3ec;
+}
+.btn-primary:hover {
+  background: var(--accent-dark);
+}
+.btn-quiet {
+  background: transparent;
+  border-color: var(--line-strong);
+}
+.btn-quiet:hover {
+  border-color: var(--ink);
+}
+.text-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--line-strong);
+  transition: text-decoration-color 150ms var(--ease);
+}
+.text-link:hover {
+  text-decoration-color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.skip {
+  position: absolute;
+  left: 16px;
+  top: -48px;
+  background: var(--ink);
+  color: #fff;
+  padding: 8px 12px;
+  z-index: 100;
+}
+.skip:focus {
+  top: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 400;
+}
+.field .hint {
+  color: var(--ink-3);
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: #fbfaf7;
+  font-size: 16px;
+  font-weight: 400;
+  transition: border-color 150ms var(--ease);
+}
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--ink-3);
+}
+.field textarea {
+  resize: vertical;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}

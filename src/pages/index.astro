@@ -1,0 +1,299 @@
+---
+import Base from "../layouts/Base.astro";
+import RoomScene from "../components/RoomScene.astro";
+import { intro, projects, services, process, press } from "../data/site";
+
+const [first, second, third] = projects;
+---
+
+<Base>
+  <section class="hero wrap">
+    <div class="copy">
+      <h1 class="display h1">{intro.title}</h1>
+      <p class="lede">{intro.text}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/enquire">Start a project</a>
+        <a class="text-link" href="/projects">See the projects</a>
+      </div>
+    </div>
+    <a class="hero-image" href={`/projects/${first.slug}`}>
+      <RoomScene view={first.gallery[0]} />
+      <span class="caption">
+        <span>{first.name}</span>
+        <span class="muted">{first.location}</span>
+      </span>
+    </a>
+  </section>
+
+  <section class="wrap selected" aria-labelledby="selected-title">
+    <h2 id="selected-title" class="display h2">Selected projects</h2>
+    <div class="pair">
+      {
+        [second, third].map((p, i) => (
+          <a class:list={["work", i === 0 ? "tall" : "wide"]} href={`/projects/${p.slug}`}>
+            <span class="frame">
+              <RoomScene view={p.gallery[p.cover]} />
+            </span>
+            <span class="meta">
+              <span class="name display">{p.name}</span>
+              <span class="muted">
+                {p.location}, {p.year}
+              </span>
+            </span>
+            <span class="summary">{p.summary}</span>
+          </a>
+        ))
+      }
+    </div>
+    <a class="text-link all" href="/projects">All {projects.length} projects</a>
+  </section>
+
+  <section class="wrap services" aria-labelledby="services-title">
+    <h2 id="services-title" class="display h2">How we work with you</h2>
+    <ul>
+      {
+        services.map((s) => (
+          <li>
+            <h3>{s.name}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="wrap process" aria-labelledby="process-title">
+    <h2 id="process-title" class="display h2">From first visit to the last lamp</h2>
+    <ol>
+      {
+        process.map((s, i) => (
+          <li>
+            <span class="n display tnum">{i + 1}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="wrap press-strip" aria-labelledby="press-title">
+    <h2 id="press-title" class="sr">Press</h2>
+    <blockquote>
+      <p class="display">{press[0].quote}</p>
+      <footer class="muted">{press[0].outlet}, {press[0].date}</footer>
+    </blockquote>
+    <ul class="outlets">
+      {press.map((p) => <li>{p.outlet}</li>)}
+    </ul>
+    <a class="text-link" href="/press">Press</a>
+  </section>
+
+  <section class="cta">
+    <div class="wrap cta-inner">
+      <h2 class="display h2">Tell us about your house</h2>
+      <p class="lede">We take on six to eight projects a year, mostly within two hours of Hudson. A short note is the best way to start.</p>
+      <a class="btn btn-primary" href="/enquire">Enquire</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
+    padding-block: clamp(24px, 4vw, 48px) clamp(64px, 8vw, 112px);
+  }
+  .copy {
+    display: grid;
+    gap: 24px;
+    padding-bottom: 48px;
+  }
+  .actions {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .hero-image {
+    display: grid;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .hero-image :global(svg) {
+    aspect-ratio: 10 / 7;
+  }
+  .caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 14px;
+  }
+  .selected {
+    padding-block: 48px 96px;
+    border-top: 1px solid var(--line-strong);
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 48px;
+    align-items: start;
+    margin-top: 40px;
+  }
+  .work {
+    display: grid;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .wide {
+    margin-top: 120px;
+  }
+  .frame {
+    display: block;
+    overflow: hidden;
+  }
+  .tall .frame :global(svg) {
+    aspect-ratio: 4 / 5;
+  }
+  .wide .frame :global(svg) {
+    aspect-ratio: 3 / 2;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .name {
+    font-size: 26px;
+  }
+  .work:hover .name {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .meta .muted {
+    font-size: 14px;
+  }
+  .summary {
+    color: var(--ink-2);
+    max-width: 32rem;
+  }
+  .all {
+    display: inline-block;
+    margin-top: 48px;
+  }
+  .services,
+  .process {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    padding-block: 64px;
+    border-top: 1px solid var(--line-strong);
+  }
+  .services ul {
+    display: grid;
+    gap: 0;
+  }
+  .services li {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 24px;
+    padding-block: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .services li:first-child {
+    padding-top: 0;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .services p,
+  .process p {
+    color: var(--ink-2);
+  }
+  .process ol {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+  }
+  .process li {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    font-size: 15px;
+  }
+  .n {
+    font-size: 32px;
+    color: var(--ink-3);
+    line-height: 1;
+  }
+  .press-strip {
+    display: grid;
+    gap: 32px;
+    justify-items: start;
+    padding-block: 80px;
+    border-top: 1px solid var(--line-strong);
+  }
+  blockquote {
+    margin: 0;
+    max-width: 48rem;
+  }
+  blockquote p {
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1.25;
+  }
+  blockquote footer {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  .outlets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 40px;
+    color: var(--ink-3);
+    font-size: 15px;
+  }
+  .cta {
+    background: var(--card);
+    border-top: 1px solid var(--line);
+  }
+  .cta-inner {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+    padding-block: 96px;
+  }
+  @media (max-width: 1000px) {
+    .process ol {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 860px) {
+    .hero,
+    .pair,
+    .services,
+    .process {
+      grid-template-columns: 1fr;
+    }
+    .copy {
+      padding-bottom: 0;
+    }
+    .wide {
+      margin-top: 0;
+    }
+    .services li {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+  }
+  @media (max-width: 480px) {
+    .process ol {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

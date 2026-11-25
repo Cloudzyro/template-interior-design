@@ -1,0 +1,175 @@
+---
+// A room drawn in flat tonal planes: walls, floor, a window or arch with its
+// light, and the furniture for the kind of room. Colors come from the view's palette.
+import type { View } from "../data/site";
+
+interface Props {
+  view: View;
+  label?: string;
+}
+const { view, label } = Astro.props;
+const p = view.palette;
+
+// Darken (negative) or lighten (positive) a hex color
+function shade(hex: string, amt: number) {
+  const n = parseInt(hex.slice(1), 16);
+  const ch = (v: number) => Math.max(0, Math.min(255, Math.round(v + (amt < 0 ? v * amt : (255 - v) * amt))));
+  const r = ch((n >> 16) & 255);
+  const g = ch((n >> 8) & 255);
+  const b = ch(n & 255);
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+}
+const k = view.kind;
+// Back wall rectangle (one-point perspective room)
+const bw = { x: 150, y: 70, w: 500, h: 330 };
+const floorY = bw.y + bw.h;
+---
+
+<svg
+  viewBox="0 0 800 560"
+  role={label === "" ? undefined : "img"}
+  aria-label={label === "" ? undefined : (label ?? view.caption)}
+  aria-hidden={label === "" ? "true" : undefined}
+  preserveAspectRatio="xMidYMid slice"
+>
+  <!-- ceiling, side walls, floor -->
+  <rect width="800" height="560" fill={shade(p.wall, 0.12)} />
+  <polygon points={`0,0 ${bw.x},${bw.y} ${bw.x},${floorY} 0,560`} fill={shade(p.wall, -0.06)} />
+  <polygon points={`800,0 ${bw.x + bw.w},${bw.y} ${bw.x + bw.w},${floorY} 800,560`} fill={shade(p.wall, -0.1)} />
+  <rect x={bw.x} y={bw.y} width={bw.w} height={bw.h} fill={p.wall} />
+  <polygon points={`0,560 ${bw.x},${floorY} ${bw.x + bw.w},${floorY} 800,560`} fill={p.floor} />
+  {[0.2, 0.4, 0.6, 0.8].map((f) => (
+    <line x1={bw.x + bw.w * f} y1={floorY} x2={800 * f} y2="560" stroke={shade(p.floor, -0.12)} stroke-width="1.2" />
+  ))}
+  <line x1={bw.x} y1={floorY} x2={bw.x + bw.w} y2={floorY} stroke={p.trim} stroke-width="6" />
+
+  <!-- opening: arched window on the back wall, and its light on the floor -->
+  {
+    k !== "hall" && (
+      <g>
+        <path d={`M${k === "bath" ? 470 : 400} ${k === "bath" ? 200 : 130} a 70 70 0 0 1 140 0 v ${k === "bath" ? 150 : 220} h -140 z`} fill={p.light} />
+        <path d={`M${k === "bath" ? 470 : 400} ${k === "bath" ? 200 : 130} a 70 70 0 0 1 140 0 v ${k === "bath" ? 150 : 220} h -140 z`} fill="none" stroke={p.trim} stroke-width="8" />
+        <line x1={k === "bath" ? 540 : 470} y1={k === "bath" ? 132 : 62} x2={k === "bath" ? 540 : 470} y2={k === "bath" ? 350 : 350} stroke={p.trim} stroke-width="4" />
+        <polygon points={`${k === "bath" ? 470 : 400},${floorY} ${k === "bath" ? 610 : 540},${floorY} ${k === "bath" ? 700 : 640},540 ${k === "bath" ? 500 : 420},540`} fill={p.light} opacity="0.35" />
+      </g>
+    )
+  }
+  {
+    k === "hall" && (
+      <g>
+        <path d="M330 400 V200 a 70 70 0 0 1 140 0 V400 Z" fill={shade(p.wall, -0.35)} />
+        <path d="M352 400 V214 a 48 48 0 0 1 96 0 V400 Z" fill={shade(p.light, -0.05)} />
+        <polygon points="300,560 330,400 470,400 500,560" fill={p.accent} opacity="0.85" />
+        <rect x="160" y="250" width="150" height="150" fill={p.wood} />
+        <rect x="160" y="250" width="150" height="8" fill={shade(p.wood, -0.2)} />
+        {[0, 1, 2].map((i) => <line x1={160 + 50 * i} y1="262" x2={160 + 50 * i} y2="400" stroke={shade(p.wood, -0.25)} />)}
+        <rect x="520" y="150" width="90" height="140" rx="45" fill={shade(p.light, 0.2)} stroke={p.accent} stroke-width="5" />
+        <rect x="510" y="330" width="120" height="16" fill={p.wood} />
+        <rect x="518" y="346" width="8" height="54" fill={shade(p.wood, -0.2)} />
+        <rect x="614" y="346" width="8" height="54" fill={shade(p.wood, -0.2)} />
+      </g>
+    )
+  }
+
+  {
+    k === "living" && (
+      <g>
+        <rect x="210" y="150" width="110" height="140" fill={shade(p.wall, -0.18)} />
+        <rect x="222" y="162" width="86" height="116" fill={p.accent} opacity="0.75" />
+        <ellipse cx="400" cy="500" rx="300" ry="44" fill={p.fabric} opacity="0.9" />
+        <rect x="180" y="330" width="300" height="70" rx="14" fill={p.fabric} />
+        <rect x="180" y="300" width="300" height="50" rx="18" fill={shade(p.fabric, -0.08)} />
+        <rect x="168" y="318" width="34" height="86" rx="14" fill={shade(p.fabric, -0.12)} />
+        <rect x="458" y="318" width="34" height="86" rx="14" fill={shade(p.fabric, -0.12)} />
+        <rect x="236" y="314" width="56" height="40" rx="10" fill={p.accent} />
+        <ellipse cx="420" cy="470" rx="90" ry="20" fill={p.wood} />
+        <rect x="380" y="470" width="80" height="34" fill={shade(p.wood, -0.15)} />
+        <ellipse cx="420" cy="504" rx="40" ry="8" fill={shade(p.wood, -0.25)} />
+        <line x1="600" y1="430" x2="600" y2="200" stroke={shade(p.wood, -0.3)} stroke-width="4" />
+        <path d="M570 200 h60 l-14 -44 h-32 z" fill={shade(p.light, -0.02)} stroke={shade(p.trim, -0.1)} />
+        <ellipse cx="600" cy="432" rx="24" ry="6" fill={shade(p.wood, -0.3)} />
+      </g>
+    )
+  }
+  {
+    k === "kitchen" && (
+      <g>
+        <rect x="150" y="250" width="240" height="150" fill={p.wood} />
+        <rect x="146" y="244" width="248" height="10" fill={p.accent} />
+        {[0, 1, 2, 3].map((i) => <line x1={150 + 60 * i} y1="262" x2={150 + 60 * i} y2="400" stroke={shade(p.wood, -0.25)} />)}
+        <rect x="170" y="150" width="200" height="8" fill={p.wood} />
+        <rect x="170" y="200" width="200" height="8" fill={p.wood} />
+        {[0, 1, 2, 3, 4].map((i) => <rect x={182 + 36 * i} y={124 + (i % 2) * 6} width="18" height={26 - (i % 2) * 6} rx="3" fill={i % 2 ? p.fabric : shade(p.trim, -0.15)} />)}
+        <rect x="230" y="420" width="300" height="90" fill={shade(p.wood, -0.1)} />
+        <rect x="222" y="410" width="316" height="16" fill={p.accent} />
+        <line x1="330" y1="0" x2="330" y2="300" stroke={shade(p.wood, -0.3)} stroke-width="2" />
+        <line x1="440" y1="0" x2="440" y2="300" stroke={shade(p.wood, -0.3)} stroke-width="2" />
+        <path d="M306 300 h48 l-8 -26 h-32 z" fill={p.fabric} />
+        <path d="M416 300 h48 l-8 -26 h-32 z" fill={p.fabric} />
+      </g>
+    )
+  }
+  {
+    k === "bedroom" && (
+      <g>
+        <rect x="220" y="250" width="320" height="110" rx="10" fill={shade(p.wood, 0.05)} />
+        <rect x="200" y="350" width="360" height="90" rx="8" fill={p.fabric} />
+        <rect x="200" y="400" width="360" height="40" rx="6" fill={shade(p.fabric, -0.1)} />
+        <rect x="200" y="378" width="360" height="40" fill={p.accent} opacity="0.75" />
+        <rect x="240" y="320" width="120" height="44" rx="14" fill={shade(p.light, 0.4)} />
+        <rect x="400" y="320" width="120" height="44" rx="14" fill={shade(p.light, 0.4)} />
+        <rect x="150" y="340" width="40" height="60" fill={p.wood} />
+        <rect x="570" y="340" width="40" height="60" fill={p.wood} />
+        <rect x="582" y="300" width="16" height="40" fill={shade(p.trim, -0.1)} />
+        <path d="M570 300 h40 l-8 -26 h-24 z" fill={p.light} stroke={shade(p.trim, -0.1)} />
+      </g>
+    )
+  }
+  {
+    k === "bath" && (
+      <g>
+        <rect x="150" y="250" width="500" height="150" fill={shade(p.wall, -0.05)} />
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => <line x1={150 + 55.5 * i} y1="250" x2={150 + 55.5 * i} y2="400" stroke={shade(p.wall, -0.15)} />)}
+        <path d="M250 380 h330 q0 90 -70 100 h-190 q-70 -10 -70 -100 z" fill={shade(p.light, 0.3)} stroke={shade(p.trim, -0.15)} stroke-width="3" />
+        <rect x="236" y="370" width="358" height="16" rx="8" fill={shade(p.light, 0.5)} stroke={shade(p.trim, -0.15)} stroke-width="2" />
+        <rect x="270" y="480" width="10" height="24" fill={p.accent} />
+        <rect x="550" y="480" width="10" height="24" fill={p.accent} />
+        <line x1="300" y1="370" x2="300" y2="310" stroke={p.accent} stroke-width="5" />
+        <path d="M300 312 q0 -14 20 -14" fill="none" stroke={p.accent} stroke-width="5" />
+        <rect x="640" y="440" width="70" height="50" rx="6" fill={p.wood} />
+        <rect x="648" y="420" width="54" height="22" rx="4" fill={p.fabric} />
+      </g>
+    )
+  }
+  {
+    k === "dining" && (
+      <g>
+        <rect x="200" y="140" width="150" height="110" fill={shade(p.wall, -0.15)} />
+        <rect x="212" y="152" width="126" height="86" fill={p.accent} opacity="0.6" />
+        <line x1="330" y1="0" x2="330" y2="250" stroke={shade(p.wood, -0.3)} stroke-width="2" />
+        <line x1="470" y1="0" x2="470" y2="250" stroke={shade(p.wood, -0.3)} stroke-width="2" />
+        <ellipse cx="330" cy="262" rx="34" ry="14" fill={p.fabric} />
+        <path d="M296 262 a 34 34 0 0 1 68 0 z" fill={p.fabric} />
+        <ellipse cx="470" cy="262" rx="34" ry="14" fill={p.fabric} />
+        <path d="M436 262 a 34 34 0 0 1 68 0 z" fill={p.fabric} />
+        {[230, 320, 410, 500].map((x) => (
+          <g>
+            <rect x={x} y="330" width="54" height="80" rx="6" fill={shade(p.wood, -0.18)} />
+          </g>
+        ))}
+        <rect x="190" y="400" width="420" height="18" fill={p.wood} />
+        <rect x="210" y="418" width="14" height="96" fill={shade(p.wood, -0.2)} />
+        <rect x="576" y="418" width="14" height="96" fill={shade(p.wood, -0.2)} />
+        <ellipse cx="400" cy="396" rx="40" ry="8" fill={p.light} opacity="0.8" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

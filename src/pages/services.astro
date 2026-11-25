@@ -1,0 +1,138 @@
+---
+import Base from "../layouts/Base.astro";
+import { services, process, feesNote } from "../data/site";
+---
+
+<Base title="Services" description="Full-service interior design, room refreshes and consultations from Calloway Reyes, with fees described plainly.">
+  <header class="wrap head">
+    <h1 class="display h1">Services and fees</h1>
+    <p class="lede">Three ways to work with us, from a two-hour visit to a whole house. Fees are fixed before we start, so there are no hourly surprises.</p>
+  </header>
+
+  <section class="wrap services" aria-label="Services">
+    {
+      services.map((s) => (
+        <article>
+          <h2 class="display">{s.name}</h2>
+          <p class="text">{s.text}</p>
+          <p class="fee">
+            <span class="muted">Fee</span>
+            {s.fee}
+          </p>
+        </article>
+      ))
+    }
+    <p class="note muted">{feesNote}</p>
+  </section>
+
+  <section class="wrap process" aria-labelledby="process-title">
+    <h2 id="process-title" class="display h2">How a project runs</h2>
+    <ol>
+      {
+        process.map((s, i) => (
+          <li>
+            <span class="n display tnum">{i + 1}</span>
+            <div>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="timing">A whole house usually takes nine to fourteen months from first visit to install; a room refresh, ten to sixteen weeks.</p>
+  </section>
+
+  <section class="wrap cta">
+    <a class="btn btn-primary" href="/enquire">Start a project</a>
+    <a class="text-link" href="/projects">See the projects</a>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding-block: clamp(32px, 5vw, 64px) 48px;
+  }
+  .lede {
+    margin-top: 16px;
+  }
+  .services {
+    border-top: 1px solid var(--line-strong);
+  }
+  article {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 48px;
+    padding-block: 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  article h2 {
+    font-size: 30px;
+  }
+  .text {
+    color: var(--ink-2);
+  }
+  .fee {
+    display: grid;
+    gap: 4px;
+    align-content: start;
+  }
+  .fee .muted {
+    font-size: 13px;
+  }
+  .note {
+    font-size: 13px;
+    padding-top: 16px;
+  }
+  .process {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    padding-block: 96px 64px;
+  }
+  .process ol {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+  .process li {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 16px;
+    padding-block: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .n {
+    font-size: 32px;
+    color: var(--ink-3);
+    line-height: 1;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .process p {
+    color: var(--ink-2);
+    margin-top: 4px;
+  }
+  .timing {
+    grid-column: 2;
+    color: var(--ink-2);
+  }
+  .cta {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding-block: 32px 128px;
+  }
+  @media (max-width: 860px) {
+    article,
+    .process {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .timing {
+      grid-column: 1;
+    }
+  }
+</style>
